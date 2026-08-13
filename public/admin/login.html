@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Login — SPM Pathway Data Collector</title>
+<link rel="stylesheet" href="../css/style.css" />
+<style>
+  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .login-card { max-width: 380px; width: 100%; }
+</style>
+</head>
+<body>
+  <div class="card login-card">
+    <h2>Researcher Admin Login</h2>
+    <div id="errBox"></div>
+    <div class="field-row">
+      <label class="field-label">Username</label>
+      <input type="text" id="username" autocomplete="username" />
+    </div>
+    <div class="field-row">
+      <label class="field-label">Password</label>
+      <input type="password" id="password" autocomplete="current-password" />
+    </div>
+    <button class="btn btn-primary" style="width:100%" id="loginBtn">Log in</button>
+    <p class="helper-text">Default account is <code>admin</code> / <code>ChangeMe123!</code> unless changed in your .env file. Change the password after first login.</p>
+  </div>
+
+<script>
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+  const errBox = document.getElementById("errBox");
+  errBox.innerHTML = "";
+  try {
+    const res = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
+    const data = await res.json();
+    if (!data.ok) {
+      errBox.innerHTML = `<div class="error-box">${data.error || "Login failed"}</div>`;
+      return;
+    }
+    window.location.href = "dashboard.html";
+  } catch (e) {
+    errBox.innerHTML = `<div class="error-box">Network error. Please try again.</div>`;
+  }
+});
+document.getElementById("password").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") document.getElementById("loginBtn").click();
+});
+</script>
+</body>
+</html>
