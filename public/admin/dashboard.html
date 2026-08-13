@@ -7,36 +7,72 @@
 <link rel="stylesheet" href="../css/style.css" />
 <script src="vendor/chart.umd.min.js"></script>
 <style>
-  body { max-width: 1100px; margin: 0 auto; padding: 20px 16px 60px; }
-  .dash-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+  body { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+  .dash-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:14px; }
+  .dash-header .who { margin:2px 0 0; color:var(--text-muted); font-size:0.88rem; }
   .stat-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:14px; margin-bottom:22px; }
   @media (max-width: 760px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
-  .stat-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center; }
-  .stat-card .num { font-size:1.6rem; font-weight:700; color:var(--primary); }
-  .stat-card .lbl { font-size:0.82rem; color:var(--text-muted); }
+  .stat-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; text-align:center; box-shadow:var(--shadow); }
+  .stat-card .num { font-size:1.9rem; font-weight:800; line-height:1.1; }
+  .stat-card .lbl { font-size:0.72rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-muted); margin-top:6px; }
+  .stat-card:nth-child(1) .num { color: var(--primary); }
+  .stat-card:nth-child(2) .num { color: var(--accent); }
+  .stat-card:nth-child(3) .num { color: var(--purple); }
+  .stat-card:nth-child(4) .num { color: var(--amber); }
+
   .chart-grid { display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:22px; }
   @media (max-width: 760px) { .chart-grid { grid-template-columns: 1fr; } }
-  .chart-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px; }
-  .chart-card h3 { margin:0 0 10px; font-size:0.95rem; color:var(--primary); }
-  table { width:100%; border-collapse: collapse; font-size:0.85rem; }
-  th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--border); white-space:nowrap; }
-  th { background:#f0f2f5; position: sticky; top:0; }
-  .table-wrap { overflow-x:auto; background:#fff; border:1px solid var(--border); border-radius:12px; }
-  .toolbar { display:flex; gap:10px; align-items:center; margin-bottom:14px; flex-wrap:wrap; }
-  .toolbar select { width:auto; }
-  .tag { padding:2px 8px; border-radius:10px; font-size:0.75rem; }
-  .tag-active { background:#e5f4ea; color:var(--success); }
-  .tag-flagged { background:#fdecea; color:var(--accent); }
-  .row-actions button { font-size:0.75rem; padding:4px 8px; border-radius:6px; border:1px solid var(--border); background:#fff; cursor:pointer; margin-right:4px; }
-  .pagination { display:flex; gap:8px; align-items:center; justify-content:center; padding:12px; }
+  .chart-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); }
+  .chart-card h3 { margin:0 0 12px; font-size:0.92rem; font-weight:700; color:var(--text); }
+
+  .toolbar { display:flex; gap:10px; align-items:center; margin-bottom:16px; flex-wrap:wrap; }
+  .toolbar label { font-size:0.85rem; font-weight:600; color:var(--text-muted); display:flex; align-items:center; gap:8px; }
+  .toolbar select { width:auto; padding:9px 14px; border-radius:var(--radius-pill); }
+
+  .resp-list { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+  .resp-row {
+    display:flex; align-items:center; gap:14px;
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm);
+    padding:14px 16px; box-shadow:var(--shadow); flex-wrap:wrap;
+  }
+  .resp-avatar {
+    width:42px; height:42px; border-radius:12px; flex-shrink:0;
+    background:var(--primary-tint); color:var(--primary);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:0.95rem;
+  }
+  .resp-main { flex:1; min-width:180px; }
+  .resp-title { font-weight:700; font-size:0.92rem; color:var(--text); }
+  .resp-sub { font-size:0.78rem; color:var(--text-muted); margin-top:2px; }
+  .resp-meta { font-size:0.85rem; color:var(--text); text-align:right; min-width:120px; }
+  .resp-meta .pathway { font-weight:600; }
+  .resp-actions { display:flex; gap:8px; }
+  .resp-actions button {
+    font-size:0.75rem; font-weight:700; font-family:inherit;
+    padding:7px 14px; border-radius:var(--radius-pill);
+    border:1.5px solid var(--border); background:#fff; cursor:pointer;
+  }
+  .resp-actions button:hover { background:#f7f8fa; }
+  .resp-actions button.danger { border-color:#f5c6cb; color:var(--accent); background:var(--accent-tint); }
+  .resp-actions button.danger:hover { background:#fbdada; }
+
+  .tag { padding:4px 11px; border-radius:var(--radius-pill); font-size:0.7rem; font-weight:700; letter-spacing:0.02em; }
+  .tag-active { background:var(--primary-tint); color:var(--primary); }
+  .tag-flagged { background:var(--accent-tint); color:var(--accent); }
+
+  .pagination { display:flex; gap:10px; align-items:center; justify-content:center; padding:12px; }
+  .pagination span { font-size:0.85rem; color:var(--text-muted); font-weight:600; }
   section { margin-bottom: 26px; }
 </style>
 </head>
 <body>
   <div class="dash-header">
-    <div>
-      <h1 style="margin:0;color:var(--primary);">Researcher Dashboard</h1>
-      <p style="margin:2px 0 0;color:var(--text-muted);font-size:0.88rem;">SPM Pathway Data Collector — logged in as <b id="whoami"></b></p>
+    <div class="brand">
+      <span class="brand-mark">🎓</span>
+      <div>
+        <span class="brand-name">Researcher Dashboard</span>
+        <p class="who">SPM Pathway Data Collector — logged in as <b id="whoami"></b></p>
+      </div>
     </div>
     <div>
       <button class="btn btn-secondary" id="exportBtn">Export CSV</button>
@@ -55,14 +91,14 @@
 
   <section>
     <div class="toolbar">
-      <label>Status:
+      <label>Status
         <select id="filterStatus">
           <option value="active">Active</option>
           <option value="flagged">Flagged</option>
           <option value="all">All</option>
         </select>
       </label>
-      <label>Type:
+      <label>Type
         <select id="filterType">
           <option value="all">All</option>
           <option value="leaver">Leaver</option>
@@ -70,17 +106,7 @@
         </select>
       </label>
     </div>
-    <div class="table-wrap">
-      <table id="respTable">
-        <thead>
-          <tr>
-            <th>ID</th><th>Code</th><th>Submitted</th><th>Status</th><th>Type</th>
-            <th>Gender</th><th>Stratum</th><th>School type</th><th>Pathway</th><th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="respBody"></tbody>
-      </table>
-    </div>
+    <div class="resp-list" id="respList"></div>
     <div class="pagination">
       <button class="btn btn-secondary" id="prevPage">Prev</button>
       <span id="pageInfo"></span>

@@ -7,23 +7,29 @@
 <link rel="stylesheet" href="../css/style.css" />
 <style>
   body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-  .login-card { max-width: 380px; width: 100%; }
+  .login-wrap { max-width: 380px; width: 100%; padding: 0 16px; }
 </style>
 </head>
 <body>
-  <div class="card login-card">
-    <h2>Researcher Admin Login</h2>
-    <div id="errBox"></div>
-    <div class="field-row">
-      <label class="field-label">Username</label>
-      <input type="text" id="username" autocomplete="username" />
+  <div class="login-wrap">
+    <div class="brand" style="justify-content:center;margin-bottom:22px;">
+      <span class="brand-mark">🎓</span>
+      <span class="brand-name">SPM Pathway</span>
     </div>
-    <div class="field-row">
-      <label class="field-label">Password</label>
-      <input type="password" id="password" autocomplete="current-password" />
+    <div class="card">
+      <h2>Researcher Admin Login</h2>
+      <div id="errBox"></div>
+      <div class="field-row">
+        <label class="field-label">Username</label>
+        <input type="text" id="username" autocomplete="username" />
+      </div>
+      <div class="field-row">
+        <label class="field-label">Password</label>
+        <input type="password" id="password" autocomplete="current-password" />
+      </div>
+      <button class="btn btn-primary" style="width:100%" id="loginBtn">Log in</button>
+      <p class="helper-text">Default account is <code>admin</code> / <code>ChangeMe123!</code> unless changed in your .env file. Change the password after first login.</p>
     </div>
-    <button class="btn btn-primary" style="width:100%" id="loginBtn">Log in</button>
-    <p class="helper-text">Default account is <code>admin</code> / <code>ChangeMe123!</code> unless changed in your .env file. Change the password after first login.</p>
   </div>
 
 <script>

@@ -294,6 +294,7 @@
   function renderThankYou() {
     cardArea.innerHTML = "";
     const box = el("div", { class: "thankyou" });
+    box.appendChild(el("div", { class: "check-badge", text: "✓" }));
     box.appendChild(el("h2", { text: t("followUpCodeTitle") }));
     box.appendChild(el("p", { text: t("followUpCodeBody") }));
     box.appendChild(el("div", { class: "code", text: followUpCode }));

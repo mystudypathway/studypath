@@ -1,5 +1,5 @@
 (function () {
-  const PALETTE = ["#1e3a5f", "#c0392b", "#2c8a6b", "#e0a72e", "#7b5ea7", "#3d8fc7", "#9c6644", "#5b6470"];
+  const PALETTE = ["#0f5c4e", "#6c5ce7", "#e8a33d", "#d64545", "#14785f", "#9c8ce0", "#f0be6f", "#78828f"];
 
   let page = 1;
   const pageSize = 20;
@@ -93,31 +93,36 @@
     const data = await api(`/api/admin/responses?page=${page}&pageSize=${pageSize}&status=${status}&respondent_type=${type}`);
     if (!data.ok) return;
 
-    const tbody = document.getElementById("respBody");
-    tbody.innerHTML = "";
+    const list = document.getElementById("respList");
+    list.innerHTML = "";
+    if (data.rows.length === 0) {
+      list.innerHTML = `<div class="helper-text" style="text-align:center;padding:20px;">No responses match this filter.</div>`;
+    }
     data.rows.forEach((r) => {
-      const tr = document.createElement("tr");
-      const pathway = r.institution_type || r.intended_pathway || r.pathway_status || "-";
-      tr.innerHTML = `
-        <td>${r.id}</td>
-        <td>${r.follow_up_code || ""}</td>
-        <td>${(r.submitted_at || "").replace("T", " ").slice(0, 16)}</td>
-        <td><span class="tag ${r.status === "flagged" ? "tag-flagged" : "tag-active"}">${r.status}</span></td>
-        <td>${r.respondent_type || ""}</td>
-        <td>${r.gender || ""}</td>
-        <td>${r.income_classification || ""}</td>
-        <td>${r.school_type || ""}</td>
-        <td>${pathway}</td>
-        <td class="row-actions">
+      const pathway = r.institution_type || r.intended_pathway || r.pathway_status || "—";
+      const initial = (r.respondent_type === "form5" ? "F5" : "L");
+      const submitted = (r.submitted_at || "").replace("T", " ").slice(0, 16);
+      const row = document.createElement("div");
+      row.className = "resp-row";
+      row.innerHTML = `
+        <div class="resp-avatar">${initial}</div>
+        <div class="resp-main">
+          <div class="resp-title">${r.follow_up_code || ("#" + r.id)} <span class="tag ${r.status === "flagged" ? "tag-flagged" : "tag-active"}">${r.status}</span></div>
+          <div class="resp-sub">${submitted} &middot; ${r.gender || "?"} &middot; ${r.income_classification || "?"} &middot; ${r.school_type || "?"}</div>
+        </div>
+        <div class="resp-meta">
+          <div class="pathway">${pathway}</div>
+        </div>
+        <div class="resp-actions">
           <button data-action="flag" data-id="${r.id}" data-status="${r.status}">${r.status === "flagged" ? "Unflag" : "Flag"}</button>
-          <button data-action="delete" data-id="${r.id}">Delete</button>
-        </td>`;
-      tbody.appendChild(tr);
+          <button class="danger" data-action="delete" data-id="${r.id}">Delete</button>
+        </div>`;
+      list.appendChild(row);
     });
 
     document.getElementById("pageInfo").textContent = `Page ${data.page} — ${data.total} total`;
 
-    tbody.querySelectorAll("button[data-action]").forEach((btn) => {
+    list.querySelectorAll("button[data-action]").forEach((btn) => {
       btn.addEventListener("click", async () => {
         const id = btn.getAttribute("data-id");
         const action = btn.getAttribute("data-action");
